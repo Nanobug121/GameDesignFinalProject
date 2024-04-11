@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour
 
     private GameObject hologram;
     private Vector3 oldPoint;
+    private Vector3 targetAngle;
 
     // Start is called before the first frame update
     void Start()
@@ -30,11 +31,14 @@ public class Movement : MonoBehaviour
             {
                 if (hologram == null)
                 {
-                    agent.SetDestination(hit.point);
                     AddHologram(hit.point);
                 }
                 else
                 {
+                    if (transform.position == hologram.transform.position)
+                    {
+                        hologram.SetActive(false);
+                    }
                     RotateHologram(hit.point);
                 }
             }
@@ -43,12 +47,13 @@ public class Movement : MonoBehaviour
         {
             if (hologram != null)
             {
+                agent.SetDestination(hologram.transform.position);
                 Destroy(hologram);
             }
-        }
-        if (hologram != null)
-        {
-            //TODO: lerp rotation
+            else
+            {
+                transform.Rotate(new Vector3(0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetAngle.y), -0.1f, 0.1f), 0));
+            }
         }
     }
 
@@ -63,7 +68,10 @@ public class Movement : MonoBehaviour
 
     void RotateHologram(Vector3 newPoint)
     {
-        hologram.transform.Rotate(new Vector3(0, (newPoint.x - oldPoint.x) * 40, 0));
+        //hologram.transform.Rotate(new Vector3(0, (newPoint.x - oldPoint.x) * 40, 0));
+        hologram.transform.LookAt(newPoint);
+        hologram.transform.Rotate(new Vector3(-hologram.transform.rotation.eulerAngles.x, 0, -hologram.transform.rotation.eulerAngles.z));
         oldPoint = newPoint;
+        targetAngle = hologram.transform.rotation.eulerAngles;
     }
 }
