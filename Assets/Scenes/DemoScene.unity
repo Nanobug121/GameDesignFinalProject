@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &44958281 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6534737610481094905, guid: 4b73477fb4d1c1e4b8c46f2b7655b50c, type: 3}
+  m_PrefabInstance: {fileID: 653200976}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &71336365
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,6 +220,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 83.863, y: 0, z: 0}
+--- !u!1 &72168966 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1677589419982893617, guid: 4b73477fb4d1c1e4b8c46f2b7655b50c, type: 3}
+  m_PrefabInstance: {fileID: 653200976}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &344442474
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,6 +862,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b26e0656bc709747a39d1e1ca31e583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  barrels:
+  - {fileID: 44958281}
+  - {fileID: 72168966}
 --- !u!1 &2135463034
 GameObject:
   m_ObjectHideFlags: 0
