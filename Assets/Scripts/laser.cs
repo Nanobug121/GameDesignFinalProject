@@ -4,13 +4,16 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+//the functionality i want is only included in an old deprecated function
+//i'm sorry
+#pragma warning disable CS0618
+
 public class laser : MonoBehaviour
 {
     private GameObject tracking;
     private Vector3 targetRotation;
     [SerializeField] private GameObject[] barrels;
 
-    // Start is called before the first frame update
     void Start()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
@@ -27,6 +30,7 @@ public class laser : MonoBehaviour
         }
         if (tracking != null)
         {
+            //TODO: use quat fromto
             Quaternion oldRotation = transform.rotation;
             transform.LookAt(tracking.transform.position);
             targetRotation = transform.rotation.eulerAngles;
@@ -34,25 +38,27 @@ public class laser : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        //WARNING: DO NOT TOUCH -- IT WORKS
         if (tracking != null) { 
         transform.Rotate(new Vector3(0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f), 0));
             if (Mathf.Abs(Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f)) < .01f)
             {
-                Vector3 angle = new Vector3(0,0,0);
-                foreach (GameObject barrel in barrels)
+                
+                float delta = Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized);
+                barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, 0.5f * Time.deltaTime);
+                barrels[1].transform.RotateAround(barrels[1].transform.GetChild(0).position - barrels[1].transform.position, -0.5f * Time.deltaTime);
+                if(delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
                 {
-                    angle = new Vector3(Mathf.Clamp(Mathf.DeltaAngle(barrel.transform.rotation.eulerAngles.x, targetRotation.x), -0.1f, 0.1f), 0, 0);
-                    barrel.transform.Rotate(angle);
+                    barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, -1 * Time.deltaTime);
+                    barrels[1].transform.RotateAround(barrels[1].transform.GetChild(0).position - barrels[1].transform.position, 1 * Time.deltaTime);
 
-                    //barrel.transform.rotation = Quaternion.RotateTowards(Quaternion.LookRotation(barrel.transform. (barrel.transform.position - transform.position)), Quaternion.LookRotation(transform.position - tracking.transform.position), 0.1f);
-                }
-                if (barrels[0].transform.rotation == Quaternion.LookRotation(transform.position - tracking.transform.position))
-                {
-                    Destroy(tracking);
-                    tracking = null;
+                    if (delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
+                    {
+                        Destroy(tracking);
+                        tracking = null;
+                    }
                 }
             }
         }
