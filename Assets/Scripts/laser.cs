@@ -12,7 +12,10 @@ public class laser : MonoBehaviour
 {
     private GameObject tracking;
     private Vector3 targetRotation;
+    private float shotLast;
+    [SerializeField] private float cooldown = 1;
     [SerializeField] private GameObject[] barrels;
+    [SerializeField] private GameObject projectile;
 
     void Start()
     {
@@ -56,7 +59,8 @@ public class laser : MonoBehaviour
 
                     if (delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
                     {
-                        Destroy(tracking);
+                        //Destroy(tracking);
+                        Shoot();
                         tracking = null;
                     }
                 }
@@ -64,7 +68,14 @@ public class laser : MonoBehaviour
         }
         else
         {
+            if(Time.time > shotLast + cooldown)
             Start();
         }
+    }
+
+    void Shoot()
+    {
+        Instantiate(projectile, transform.position, Quaternion.Euler(targetRotation));
+        shotLast = Time.time;
     }
 }

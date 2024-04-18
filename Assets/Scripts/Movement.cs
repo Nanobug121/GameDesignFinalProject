@@ -7,11 +7,10 @@ using UnityEngine.AI;
 public class Movement : MonoBehaviour
 {
     [SerializeField] private new Camera camera;
-    [SerializeField] private Material hologramMaterial;
+    [SerializeField] private GameObject hologramPrefab;
     private NavMeshAgent agent;
 
     private GameObject hologram;
-    private Vector3 oldPoint;
     private Vector3 targetAngle;
 
     // Start is called before the first frame update
@@ -59,11 +58,10 @@ public class Movement : MonoBehaviour
 
     void AddHologram(Vector3 point)
     {
-        hologram = Instantiate(gameObject, new Vector3(point.x, transform.position.y, point.z), Quaternion.identity);
-        Destroy(hologram.GetComponent<Movement>());
-        Destroy(hologram.GetComponent<NavMeshAgent>());
-        hologram.GetComponent<Renderer>().material = hologramMaterial;
-        oldPoint = point;
+        hologram = Instantiate(hologramPrefab, new Vector3(point.x, transform.position.y, point.z), Quaternion.identity);
+        //Destroy(hologram.GetComponent<Movement>());
+        //Destroy(hologram.GetComponent<NavMeshAgent>());
+        //hologram.GetComponent<Renderer>().material = hologramMaterial;
     }
 
     void RotateHologram(Vector3 newPoint)
@@ -71,7 +69,6 @@ public class Movement : MonoBehaviour
         //hologram.transform.Rotate(new Vector3(0, (newPoint.x - oldPoint.x) * 40, 0));
         hologram.transform.LookAt(newPoint);
         hologram.transform.Rotate(new Vector3(-hologram.transform.rotation.eulerAngles.x, 0, -hologram.transform.rotation.eulerAngles.z));
-        oldPoint = newPoint;
         targetAngle = hologram.transform.rotation.eulerAngles;
     }
 }
