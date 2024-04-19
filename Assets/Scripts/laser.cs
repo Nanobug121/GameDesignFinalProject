@@ -75,7 +75,9 @@ public class laser : MonoBehaviour
 
     void Shoot()
     {
-        Instantiate(projectile, transform.position, Quaternion.Euler(targetRotation));
+        foreach(GameObject barrel in barrels) {
+            Instantiate(projectile, barrel.transform.GetChild(0).position, Quaternion.Euler(targetRotation));
+        }
         shotLast = Time.time;
     }
 }
