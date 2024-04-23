@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,6 +17,7 @@ public class laser : MonoBehaviour
     [SerializeField] private float cooldown = 1;
     [SerializeField] private GameObject[] barrels;
     [SerializeField] private GameObject projectile;
+    public string targetTag = "Shang";
 
     void Start()
     {
@@ -24,11 +26,11 @@ public class laser : MonoBehaviour
         {
             if(tracking == null)
             {
-                tracking = enemy;
+                //tracking = enemy;
             }
             else if(Vector3.Distance(transform.position, enemy.transform.position) < Vector3.Distance(transform.position, tracking.transform.position))
             {
-                tracking = enemy;
+                //tracking = enemy;
             }
         }
         if (tracking != null)
@@ -44,7 +46,8 @@ public class laser : MonoBehaviour
     void Update()
     {
         //WARNING: DO NOT TOUCH -- IT WORKS
-        if (tracking != null) { 
+        if (tracking != null) {
+            ReTrack();
         transform.Rotate(new Vector3(0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f), 0));
             if (Mathf.Abs(Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f)) < .01f)
             {
@@ -68,16 +71,38 @@ public class laser : MonoBehaviour
         }
         else
         {
-            if(Time.time > shotLast + cooldown)
-            Start();
+            //if(Time.time > shotLast + cooldown)
+            //Start();
         }
     }
 
     void Shoot()
     {
         foreach(GameObject barrel in barrels) {
-            Instantiate(projectile, barrel.transform.GetChild(0).position, Quaternion.Euler(targetRotation));
+            GameObject pr = Instantiate(projectile, barrel.transform.GetChild(0).position, Quaternion.Euler(targetRotation));
+            pr.GetComponent<Projectile>().targetTag = targetTag;
         }
         shotLast = Time.time;
+    }
+
+    public void SetTarget(GameObject newTarget)
+    {
+        if (Time.time > shotLast + cooldown)
+        {
+            tracking = newTarget;
+            
+            ReTrack();
+        }
+    }
+
+    void ReTrack()
+    {
+        if (tracking != null)
+        {
+            Quaternion oldRotation = transform.rotation;
+            transform.LookAt(tracking.transform.position);
+            targetRotation = transform.rotation.eulerAngles;
+            transform.rotation = oldRotation;
+        }
     }
 }

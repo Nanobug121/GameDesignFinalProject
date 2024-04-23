@@ -13,6 +13,8 @@ public class Movement : MonoBehaviour
     private GameObject hologram;
     private Vector3 targetAngle;
 
+    private bool active = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,36 +24,39 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(1))
+        if (active)
         {
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Input.GetMouseButton(1))
             {
-                if (hologram == null)
+                Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
                 {
-                    AddHologram(hit.point);
-                }
-                else
-                {
-                    if (transform.position == hologram.transform.position)
+                    if (hologram == null)
                     {
-                        hologram.SetActive(false);
+                        AddHologram(hit.point);
                     }
-                    RotateHologram(hit.point);
+                    else
+                    {
+                        if (transform.position == hologram.transform.position)
+                        {
+                            hologram.SetActive(false);
+                        }
+                        RotateHologram(hit.point);
+                    }
                 }
-            }
-        }
-        else
-        {
-            if (hologram != null)
-            {
-                agent.SetDestination(hologram.transform.position);
-                Destroy(hologram);
             }
             else
             {
-                transform.Rotate(new Vector3(0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetAngle.y), -0.1f, 0.1f), 0));
+                if (hologram != null)
+                {
+                    agent.SetDestination(hologram.transform.position);
+                    Destroy(hologram);
+                }
+                else
+                {
+                    transform.Rotate(new Vector3(0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetAngle.y), -0.1f, 0.1f), 0));
+                }
             }
         }
     }
@@ -70,5 +75,15 @@ public class Movement : MonoBehaviour
         hologram.transform.LookAt(newPoint);
         hologram.transform.Rotate(new Vector3(-hologram.transform.rotation.eulerAngles.x, 0, -hologram.transform.rotation.eulerAngles.z));
         targetAngle = hologram.transform.rotation.eulerAngles;
+    }
+
+    public void Activate()
+    {
+        active = true;
+    }
+
+    public void DeActivate()
+    {
+        active = false;
     }
 }
