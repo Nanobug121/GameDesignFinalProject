@@ -1,26 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ShipInfo : MonoBehaviour
 {
-    public string name;
     public ShipClass shipClass;
-    public float maxHealth;
-    public float health;
-    public float speed;
+    public float maxHealth { get { return gameObject.GetComponent<Health>().maxHealth; } }
+    public float health { get { return gameObject.GetComponent<Health>().health; }}
+    public float speed { get { return gameObject.GetComponent<NavMeshAgent>().speed; } }
     public WeaponState[] weapons;
+    public string[] weaponNames;
 
     public enum ShipClass
     {
         big,
-        small
+        smol
     }
 
     public enum WeaponState
     {
         firing,
-        waiting,
+        idle,
         damaged,
         aiming
     }
