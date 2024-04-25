@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed;
     public string targetTag;
+    public float damage;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,7 @@ public class Projectile : MonoBehaviour
     {
         if (collision.gameObject.tag.Equals(targetTag))
         {
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<Health>().Hit(damage);
             Destroy(gameObject);
         }
     }

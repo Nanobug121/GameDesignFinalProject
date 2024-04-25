@@ -17,7 +17,33 @@ public class laser : MonoBehaviour
     [SerializeField] private float cooldown = 1;
     [SerializeField] private GameObject[] barrels;
     [SerializeField] private GameObject projectile;
+    [SerializeField] private float damage = 1;
+    private GameObject gameManager;
     public string targetTag = "Shang";
+
+    private ShipInfo.WeaponState weaponState = ShipInfo.WeaponState.idle;
+
+    public ShipInfo.WeaponState state
+    {
+        get
+        {
+            return weaponState;
+        }
+        private set
+        {
+            if (value != weaponState)
+            {
+                weaponState = value; 
+                gameManager.GetComponent<ShipSelector>().Refresh();
+            }
+        }
+    }
+    
+
+    private void Awake()
+    {
+        gameManager = GameObject.Find("Game Manager");
+    }
 
     void Start()
     {
@@ -47,31 +73,36 @@ public class laser : MonoBehaviour
     {
         //WARNING: DO NOT TOUCH -- IT WORKS
         if (tracking != null) {
-            ReTrack();
-        transform.Rotate(new Vector3(0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f), 0));
-            if (Mathf.Abs(Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f)) < .01f)
+            if (Time.time > shotLast + cooldown)
             {
-                
-                float delta = Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized);
-                barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, 0.5f * Time.deltaTime);
-                barrels[1].transform.RotateAround(barrels[1].transform.GetChild(0).position - barrels[1].transform.position, -0.5f * Time.deltaTime);
-                if(delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
+                ReTrack();
+                state = ShipInfo.WeaponState.aiming;
+                transform.Rotate(new Vector3(0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f), 0));
+                if (Mathf.Abs(Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f)) < .01f)
                 {
-                    barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, -1 * Time.deltaTime);
-                    barrels[1].transform.RotateAround(barrels[1].transform.GetChild(0).position - barrels[1].transform.position, 1 * Time.deltaTime);
 
+                    float delta = Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized);
+                    barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, 0.5f * Time.deltaTime);
+                    barrels[1].transform.RotateAround(barrels[1].transform.GetChild(0).position - barrels[1].transform.position, -0.5f * Time.deltaTime);
                     if (delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
                     {
-                        //Destroy(tracking);
-                        Shoot();
-                        tracking = null;
+                        barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, -1 * Time.deltaTime);
+                        barrels[1].transform.RotateAround(barrels[1].transform.GetChild(0).position - barrels[1].transform.position, 1 * Time.deltaTime);
+
+                        if (delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
+                        {
+                            //Destroy(tracking);
+                            Shoot();
+                            //tracking = null;
+                        }
                     }
                 }
             }
         }
         else
         {
-            //if(Time.time > shotLast + cooldown)
+            if(Time.time > shotLast + cooldown)
+                state = ShipInfo.WeaponState.idle;
             //Start();
         }
     }
@@ -81,8 +112,10 @@ public class laser : MonoBehaviour
         foreach(GameObject barrel in barrels) {
             GameObject pr = Instantiate(projectile, barrel.transform.GetChild(0).position, Quaternion.Euler(targetRotation));
             pr.GetComponent<Projectile>().targetTag = targetTag;
+            pr.GetComponent<Projectile>().damage = damage;
         }
         shotLast = Time.time;
+        state = ShipInfo.WeaponState.firing;
     }
 
     public void SetTarget(GameObject newTarget)

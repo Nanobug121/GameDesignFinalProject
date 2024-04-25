@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Build.Content;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class ShipSelector : MonoBehaviour
 {
     [SerializeField] private new Camera camera;
     [SerializeField] private GameObject gameManager;
-    private GameObject selected;
+    [SerializeField] private GameObject[] selected;
 
     // Start is called before the first frame update
     void Start()
@@ -24,46 +25,73 @@ public class ShipSelector : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                if (selected != null)
-                {
-                    selected.GetComponent<Movement>().DeActivate();
-                }
                 if (hit.collider.gameObject.tag == gameManager.GetComponent<GameManager>().GetEnemyTeam())
                 {
-                    if(selected != null && selected.tag == gameManager.GetComponent<GameManager>().GetPlayerTeam())
+                    if(selected != null)
                     {
-                        foreach(laser l in selected.GetComponentsInChildren<laser>())
+                        foreach (var item in selected)
                         {
-                            l.SetTarget(hit.collider.gameObject);
+                            foreach (laser l in item.GetComponentsInChildren<laser>())
+                            {
+                                l.SetTarget(hit.collider.gameObject);
+                            }
                         }
                     }
-                    selected.GetComponent<Movement>().Activate();
                     return;
                 }
-                if (hit.collider.gameObject.tag == gameManager.GetComponent<GameManager>().GetPlayerTeam())
+                if (hit.collider.gameObject.tag == gameManager.GetComponent<GameManager>().GetPlayerTeam() && hit.collider.gameObject.GetComponent<Movement>() != null)
                 {
-                selected = hit.collider.gameObject;
-                    gameManager.GetComponent<GameManager>().UpdateShipInfo(selected);
-
-                    if (selected.GetComponent<Movement>() == null)
+                    if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                     {
-                        selected = null;
-                        gameManager.GetComponent<GameManager>().UpdateShipInfo(selected);
-                        return;
+                        GameObject[] old = ((GameObject[]) selected.Clone());
+                        selected = new GameObject[selected.Length + 1];
+                        for(int i = 0; i < selected.Length - 1; i++)
+                        {
+                            selected[i] = old[i];
+                        }
+                        selected[selected.Length - 1] = hit.collider.gameObject;
+                        
+                        hit.collider.gameObject.GetComponent<Movement>().Activate();
                     }
-                    selected.GetComponent<Movement>().Activate();
+                    else
+                    {
+                        if (selected != null)
+                        {
+                            foreach (var item in selected)
+                            {
+                                item.GetComponent<Movement>().DeActivate();
+                            }
+                        }
+                        selected = new GameObject[] {hit.collider.gameObject};
+                        selected[0].GetComponent<Movement>().Activate();
+                    }
+                    Refresh();
+
                 }
                 else
                 {
                     selected = null;
-                    gameManager.GetComponent<GameManager>().UpdateShipInfo(selected);
+                    Refresh();
                 }
             }
             else
             {
                 selected = null;
-                gameManager.GetComponent<GameManager>().UpdateShipInfo(selected);
+                Refresh();
             }
+        }
+    }
+
+    public void Refresh()
+    {
+
+        if (selected != null && selected.Length == 1)
+        {
+            gameManager.GetComponent<GameManager>().UpdateShipInfo(selected[0]);
+        }
+        else
+        {
+            gameManager.GetComponent<GameManager>().UpdateShipInfo(null);
         }
     }
 }

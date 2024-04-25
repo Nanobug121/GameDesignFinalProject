@@ -9,8 +9,28 @@ public class ShipInfo : MonoBehaviour
     public float maxHealth { get { return gameObject.GetComponent<Health>().maxHealth; } }
     public float health { get { return gameObject.GetComponent<Health>().health; }}
     public float speed { get { return gameObject.GetComponent<NavMeshAgent>().speed; } }
-    public WeaponState[] weapons;
-    public string[] weaponNames;
+    public WeaponState[] weapons { 
+        get { 
+            WeaponState[] ret = new WeaponState[transform.childCount];
+            for(int i = 0; i < transform.childCount; i++)
+            {
+                ret[i] = transform.GetChild(i).GetComponent<laser>().state;
+            }
+            return ret;
+         } 
+    }
+    public string[] weaponNames
+    {
+        get
+        {
+            string[] ret = new string[transform.childCount];
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                ret[i] = transform.GetChild(i).name;
+            }
+            return ret;
+        }
+    }
 
     public enum ShipClass
     {
