@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class Movement : MonoBehaviour
 {
@@ -13,11 +15,14 @@ public class Movement : MonoBehaviour
     private GameObject hologram;
     private Vector3 targetAngle;
 
+    public GameManager gameManager;
+
     private bool active = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -34,7 +39,8 @@ public class Movement : MonoBehaviour
                 {
                     if (hologram == null)
                     {
-                        AddHologram(hit.point);
+                        var holo = AddHologram(hit.point);
+                        gameManager.AddHologram(holo);
                     }
                     else
                     {
@@ -61,9 +67,22 @@ public class Movement : MonoBehaviour
         }
     }
 
-    void AddHologram(Vector3 point)
+    Bounds AddHologram(Vector3 point)
     {
         hologram = Instantiate(hologramPrefab, new Vector3(point.x, transform.position.y, point.z), Quaternion.identity);
+        //hologram = Instantiate(hologramPrefab, transform.position, Quaternion.identity);
+        if (gameManager.GetBounds() != null)
+        {
+            foreach (var bounds in gameManager.GetBounds())
+            {
+                while (hologram.GetComponent<Collider>().bounds.Intersects(bounds))
+                {
+                    hologram.transform.Translate(Random.value * 2 - 1, 0, Random.value * 2 - 1);
+                }
+            }
+        }
+        return hologram.GetComponent<Collider>().bounds;
+
         //Destroy(hologram.GetComponent<Movement>());
         //Destroy(hologram.GetComponent<NavMeshAgent>());
         //hologram.GetComponent<Renderer>().material = hologramMaterial;

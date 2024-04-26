@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject shipInfo;
+    Bounds[] holograms;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,5 +53,27 @@ public class GameManager : MonoBehaviour
                 status.text += info.weaponNames[i] + ": " + info.weapons[i] + "\n";
             }
         }
+    }
+
+    public void AddHologram(Bounds hologram)
+    {
+        if (holograms != null)
+        {
+            Bounds[] old = ((Bounds[])holograms.Clone());
+            holograms = new Bounds[holograms.Length + 1];
+            for (int i = 0; i < holograms.Length - 1; i++)
+            {
+                holograms[i] = old[i];
+            }
+        }
+        else
+        {
+            holograms = new Bounds[1];
+        }
+        holograms[holograms.Length - 1] = hologram;
+    }
+    public Bounds[] GetBounds()
+    {
+        return holograms;
     }
 }
