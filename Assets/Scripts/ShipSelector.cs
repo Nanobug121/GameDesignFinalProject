@@ -52,6 +52,7 @@ public class ShipSelector : MonoBehaviour
                         selected[selected.Length - 1] = hit.collider.gameObject;
                         
                         hit.collider.gameObject.GetComponent<Movement>().Activate();
+                        hit.collider.gameObject.transform.Find("range").gameObject.SetActive(true);
                     }
                     else
                     {
@@ -60,22 +61,34 @@ public class ShipSelector : MonoBehaviour
                             foreach (var item in selected)
                             {
                                 item.GetComponent<Movement>().DeActivate();
+                                item.transform.Find("range").gameObject.SetActive(false);
                             }
                         }
                         selected = new GameObject[] {hit.collider.gameObject};
                         selected[0].GetComponent<Movement>().Activate();
+                        hit.collider.gameObject.transform.Find("range").gameObject.SetActive(true);
                     }
                     Refresh();
 
                 }
                 else
                 {
+                    foreach (var item in selected)
+                    {
+                        item.GetComponent<Movement>().DeActivate();
+                        item.transform.Find("range").gameObject.SetActive(false);
+                    }
                     selected = null;
                     Refresh();
                 }
             }
             else
             {
+                foreach (var item in selected)
+                {
+                    item.GetComponent<Movement>().DeActivate();
+                    item.transform.Find("range").gameObject.SetActive(false);
+                }
                 selected = null;
                 Refresh();
             }

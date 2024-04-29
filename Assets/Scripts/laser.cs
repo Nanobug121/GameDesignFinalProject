@@ -47,18 +47,18 @@ public class laser : MonoBehaviour
 
     void Start()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
-        foreach(GameObject enemy in enemies)
-        {
-            if(tracking == null)
-            {
-                //tracking = enemy;
-            }
-            else if(Vector3.Distance(transform.position, enemy.transform.position) < Vector3.Distance(transform.position, tracking.transform.position))
-            {
-                //tracking = enemy;
-            }
-        }
+        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
+        //foreach(GameObject enemy in enemies)
+        //{
+        //    if(tracking == null)
+        //    {
+        //        //tracking = enemy;
+        //    }
+        //    else if(Vector3.Distance(transform.position, enemy.transform.position) < Vector3.Distance(transform.position, tracking.transform.position))
+        //    {
+        //        //tracking = enemy;
+        //    }
+        //}
         if (tracking != null)
         {
             //TODO: use quat fromto
@@ -102,7 +102,19 @@ public class laser : MonoBehaviour
         else
         {
             if(Time.time > shotLast + cooldown)
+            {
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
+                foreach (GameObject enemy in enemies)
+                {
+                    if (Vector3.Distance(transform.position, enemy.transform.position) < transform.parent.GetComponent<ShipInfo>().range)
+                    {
+                        tracking = enemy;
+                        Start();
+                        return;
+                    }
+                }
                 state = ShipInfo.WeaponState.idle;
+            }
             //Start();
         }
     }

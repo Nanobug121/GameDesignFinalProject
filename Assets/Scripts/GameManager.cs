@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        deleteBounds();
     }
 
     public string GetPlayerTeam()
@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
             status.text = "";
             for (int i = 0; i < info.weapons.Length; i++)
             {
+                if(info.weapons[i] != ShipInfo.WeaponState.none)
                 status.text += info.weaponNames[i] + ": " + info.weapons[i] + "\n";
             }
         }
@@ -75,5 +76,10 @@ public class GameManager : MonoBehaviour
     public Bounds[] GetBounds()
     {
         return holograms;
+    }
+
+    public void deleteBounds()
+    {
+        holograms = null;
     }
 }

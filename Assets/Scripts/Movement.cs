@@ -18,6 +18,7 @@ public class Movement : MonoBehaviour
     public GameManager gameManager;
 
     private bool active = false;
+    private bool stopping = false;
 
     // Start is called before the first frame update
     void Start()
@@ -31,8 +32,39 @@ public class Movement : MonoBehaviour
     {
         if (active)
         {
+            if (stopping)
+            {
+                if (agent.velocity == Vector3.zero)
+                {
+                    agent.SetDestination(transform.position);
+                stopping = false;
+                agent.isStopped = false;
+                }
+            }
+
+            if (Input.GetKey(KeyCode.Backspace))
+            {
+                if (agent.velocity == Vector3.zero)
+                {
+                    agent.SetDestination(transform.position);
+                }
+                if (hologram != null)
+                {
+                    Destroy(hologram);
+                }
+                stopping = true;
+                agent.isStopped = true;
+                targetAngle = transform.rotation.eulerAngles;
+                return;
+            }
             if (Input.GetMouseButton(1))
             {
+                if (stopping)
+                {
+                    stopping = false;
+                    agent.isStopped = false;
+                }
+
                 Ray ray = camera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
@@ -75,10 +107,17 @@ public class Movement : MonoBehaviour
         {
             foreach (var bounds in gameManager.GetBounds())
             {
-                while (hologram.GetComponent<Collider>().bounds.Intersects(bounds))
+                //TODO: loop over bounds already checked
+                Vector3 offset = new Vector3(0, 0, 0);
+                var b = hologram.GetComponent<Collider>().bounds;
+                while (b.Intersects(bounds))
                 {
-                    hologram.transform.Translate(Random.value * 2 - 1, 0, Random.value * 2 - 1);
+                    offset += new Vector3(Random.value * 0.2f - 0.1f, 0, Random.value * 0.2f - 0.1f);
+
+                    b = hologram.GetComponent<Collider>().bounds;
+                    b.center += offset;
                 }
+                hologram.transform.Translate( offset);
             }
         }
         return hologram.GetComponent<Collider>().bounds;
