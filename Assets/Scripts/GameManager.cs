@@ -50,8 +50,8 @@ public class GameManager : MonoBehaviour
             status.text = "";
             for (int i = 0; i < info.weapons.Length; i++)
             {
-                if(info.weapons[i] != ShipInfo.WeaponState.none)
-                status.text += info.weaponNames[i] + ": " + info.weapons[i] + "\n";
+                if (info.weapons[i] != ShipInfo.WeaponState.none)
+                    status.text += info.weaponNames[i] + ": " + info.weapons[i] + "\n";
             }
         }
     }
@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
         }
         holograms[holograms.Length - 1] = hologram;
     }
+
     public Bounds[] GetBounds()
     {
         return holograms;

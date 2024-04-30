@@ -13,7 +13,7 @@ public class ShipSelector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -27,7 +27,7 @@ public class ShipSelector : MonoBehaviour
             {
                 if (hit.collider.gameObject.tag == gameManager.GetComponent<GameManager>().GetEnemyTeam())
                 {
-                    if(selected != null)
+                    if (selected != null)
                     {
                         foreach (var item in selected)
                         {
@@ -43,14 +43,14 @@ public class ShipSelector : MonoBehaviour
                 {
                     if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                     {
-                        GameObject[] old = ((GameObject[]) selected.Clone());
+                        GameObject[] old = ((GameObject[])selected.Clone());
                         selected = new GameObject[selected.Length + 1];
-                        for(int i = 0; i < selected.Length - 1; i++)
+                        for (int i = 0; i < selected.Length - 1; i++)
                         {
                             selected[i] = old[i];
                         }
                         selected[selected.Length - 1] = hit.collider.gameObject;
-                        
+
                         hit.collider.gameObject.GetComponent<Movement>().Activate();
                         hit.collider.gameObject.transform.Find("range").gameObject.SetActive(true);
                     }
@@ -64,7 +64,7 @@ public class ShipSelector : MonoBehaviour
                                 item.transform.Find("range").gameObject.SetActive(false);
                             }
                         }
-                        selected = new GameObject[] {hit.collider.gameObject};
+                        selected = new GameObject[] { hit.collider.gameObject };
                         selected[0].GetComponent<Movement>().Activate();
                         hit.collider.gameObject.transform.Find("range").gameObject.SetActive(true);
                     }
@@ -73,10 +73,13 @@ public class ShipSelector : MonoBehaviour
                 }
                 else
                 {
-                    foreach (var item in selected)
+                    if (selected != null)
                     {
-                        item.GetComponent<Movement>().DeActivate();
-                        item.transform.Find("range").gameObject.SetActive(false);
+                        foreach (var item in selected)
+                        {
+                            item.GetComponent<Movement>().DeActivate();
+                            item.transform.Find("range").gameObject.SetActive(false);
+                        }
                     }
                     selected = null;
                     Refresh();

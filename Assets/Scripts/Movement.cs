@@ -19,6 +19,7 @@ public class Movement : MonoBehaviour
 
     private bool active = false;
     private bool stopping = false;
+    private GameObject nextEnemy;
 
     // Start is called before the first frame update
     void Start()
@@ -37,8 +38,8 @@ public class Movement : MonoBehaviour
                 if (agent.velocity == Vector3.zero)
                 {
                     agent.SetDestination(transform.position);
-                stopping = false;
-                agent.isStopped = false;
+                    stopping = false;
+                    agent.isStopped = false;
                 }
             }
 
@@ -59,7 +60,8 @@ public class Movement : MonoBehaviour
             }
             if (Input.GetMouseButton(1))
             {
-                if (stopping)
+                agent.stoppingDistance = 0;
+                if (stopping || agent.isStopped)
                 {
                     stopping = false;
                     agent.isStopped = false;
@@ -107,17 +109,30 @@ public class Movement : MonoBehaviour
         {
             foreach (var bounds in gameManager.GetBounds())
             {
-                //TODO: loop over bounds already checked
                 Vector3 offset = new Vector3(0, 0, 0);
                 var b = hologram.GetComponent<Collider>().bounds;
+                float spacing = 1;
+                b.Expand(spacing);
                 while (b.Intersects(bounds))
                 {
                     offset += new Vector3(Random.value * 0.2f - 0.1f, 0, Random.value * 0.2f - 0.1f);
 
                     b = hologram.GetComponent<Collider>().bounds;
+                    b.Expand(spacing);
                     b.center += offset;
                 }
-                hologram.transform.Translate( offset);
+                hologram.transform.Translate(offset);
+            }
+            foreach (var bounds in gameManager.GetBounds())
+            {
+                var b = hologram.GetComponent<Collider>().bounds;
+                float spacing = 1;
+                b.Expand(spacing);
+                if (b.Intersects(bounds))
+                {
+                    Destroy(hologram);
+                    //return AddHologram(point);
+                }
             }
         }
         return hologram.GetComponent<Collider>().bounds;
@@ -143,5 +158,12 @@ public class Movement : MonoBehaviour
     public void DeActivate()
     {
         active = false;
+    }
+
+    public void GoToEnemy(GameObject enemy)
+    {
+        nextEnemy = enemy;
+        agent.stoppingDistance = GetComponent<ShipInfo>().range;
+        agent.SetDestination(enemy.transform.position);
     }
 }

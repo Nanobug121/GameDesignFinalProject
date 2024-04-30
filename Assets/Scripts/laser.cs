@@ -33,12 +33,12 @@ public class laser : MonoBehaviour
         {
             if (value != weaponState)
             {
-                weaponState = value; 
+                weaponState = value;
                 gameManager.GetComponent<ShipSelector>().Refresh();
             }
         }
     }
-    
+
 
     private void Awake()
     {
@@ -47,35 +47,18 @@ public class laser : MonoBehaviour
 
     void Start()
     {
-        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
-        //foreach(GameObject enemy in enemies)
-        //{
-        //    if(tracking == null)
-        //    {
-        //        //tracking = enemy;
-        //    }
-        //    else if(Vector3.Distance(transform.position, enemy.transform.position) < Vector3.Distance(transform.position, tracking.transform.position))
-        //    {
-        //        //tracking = enemy;
-        //    }
-        //}
-        if (tracking != null)
-        {
-            //TODO: use quat fromto
-            Quaternion oldRotation = transform.rotation;
-            transform.LookAt(tracking.transform.position);
-            targetRotation = transform.rotation.eulerAngles;
-            transform.rotation = oldRotation;
-        }
+
     }
 
     void Update()
     {
         //WARNING: DO NOT TOUCH -- IT WORKS
-        if (tracking != null) {
+        if (tracking != null)
+        {
             if (Time.time > shotLast + cooldown)
             {
                 ReTrack();
+                if (tracking == null) return;
                 state = ShipInfo.WeaponState.aiming;
                 transform.Rotate(new Vector3(0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f), 0));
                 if (Mathf.Abs(Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f)) < .01f)
@@ -101,15 +84,14 @@ public class laser : MonoBehaviour
         }
         else
         {
-            if(Time.time > shotLast + cooldown)
+            if (Time.time > shotLast + cooldown)
             {
-                GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag(targetTag);
                 foreach (GameObject enemy in enemies)
                 {
                     if (Vector3.Distance(transform.position, enemy.transform.position) < transform.parent.GetComponent<ShipInfo>().range)
                     {
                         tracking = enemy;
-                        Start();
                         return;
                     }
                 }
@@ -121,7 +103,8 @@ public class laser : MonoBehaviour
 
     void Shoot()
     {
-        foreach(GameObject barrel in barrels) {
+        foreach (GameObject barrel in barrels)
+        {
             GameObject pr = Instantiate(projectile, barrel.transform.GetChild(0).position, Quaternion.Euler(targetRotation));
             pr.GetComponent<Projectile>().targetTag = targetTag;
             pr.GetComponent<Projectile>().damage = damage;
@@ -134,14 +117,26 @@ public class laser : MonoBehaviour
     {
         if (Time.time > shotLast + cooldown)
         {
-            tracking = newTarget;
-            
-            ReTrack();
+            if (Vector3.Distance(transform.position, newTarget.transform.position) < transform.parent.GetComponent<ShipInfo>().range)
+            {
+                tracking = newTarget;
+            }
+            else
+            {
+                transform.parent.GetComponent<Movement>().GoToEnemy(newTarget);
+                tracking = null;
+            }
+
+            //ReTrack();
         }
     }
 
     void ReTrack()
     {
+        if (Vector3.Distance(transform.position, tracking.transform.position) > transform.parent.GetComponent<ShipInfo>().range)
+        {
+            tracking = null;
+        }
         if (tracking != null)
         {
             Quaternion oldRotation = transform.rotation;
@@ -150,4 +145,5 @@ public class laser : MonoBehaviour
             transform.rotation = oldRotation;
         }
     }
+
 }
