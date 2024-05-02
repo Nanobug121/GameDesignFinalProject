@@ -43,6 +43,7 @@ public class ShipSelector : MonoBehaviour
                 {
                     if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                     {
+                        //TODO: ensure value of selected
                         GameObject[] old = ((GameObject[])selected.Clone());
                         selected = new GameObject[selected.Length + 1];
                         for (int i = 0; i < selected.Length - 1; i++)

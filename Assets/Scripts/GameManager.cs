@@ -5,14 +5,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
+using System.Collections.Concurrent;
+using System.Drawing;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject shipInfo;
     Bounds[] holograms;
+    ConcurrentQueue<GameObject> holoQueue;
     // Start is called before the first frame update
     void Start()
     {
+        holoQueue = new ConcurrentQueue<GameObject>();
         UpdateShipInfo(null);
     }
 
@@ -20,6 +24,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         deleteBounds();
+    }
+
+    private void LateUpdate()
+    {
+        ComputeHolograms();
     }
 
     public string GetPlayerTeam()
@@ -56,13 +65,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void AddToQueue(GameObject hologram)
+    {
+        holoQueue.Enqueue(hologram);
+    }
+
     public void AddHologram(Bounds hologram)
     {
+        Debug.Log(holograms);
         if (holograms != null)
         {
             Bounds[] old = ((Bounds[])holograms.Clone());
             holograms = new Bounds[holograms.Length + 1];
-            for (int i = 0; i < holograms.Length - 1; i++)
+            for (int i = 0; i < old.Length; i++)
             {
                 holograms[i] = old[i];
             }
@@ -82,5 +97,51 @@ public class GameManager : MonoBehaviour
     public void deleteBounds()
     {
         holograms = null;
+    }
+
+    public void ComputeHolograms()
+    {
+        GameObject hologram;
+        while(holoQueue.TryDequeue(out hologram))
+        {
+            AddHologram(ComputeHologram(hologram));
+        }
+    }
+
+    public Bounds ComputeHologram(GameObject hologram)
+    {
+        if (GetBounds() != null)
+        {
+                Vector3 offset = Vector3.zero;
+            foreach (var bounds in GetBounds())
+            {
+                var b = hologram.GetComponent<Collider>().bounds;
+                float spacing = 1;
+                b.Expand(spacing);
+                while (b.Intersects(bounds))
+                {
+                    offset += new Vector3(Random.value * 0.2f - 0.1f, 0, Random.value * 0.2f - 0.1f);
+
+                    b = hologram.GetComponent<Collider>().bounds;
+                    b.Expand(spacing);
+                    b.center += offset;
+                }
+            }
+                hologram.transform.Translate(offset);
+            foreach (var bounds in GetBounds())
+            {
+                var b = hologram.GetComponent<Collider>().bounds;
+                b.center = hologram.transform.position;
+                float spacing = 1;
+                b.Expand(spacing);
+                if (b.Intersects(bounds))
+                {
+                    hologram.transform.Translate(-offset);
+
+                    return ComputeHologram(hologram);
+                }
+            }
+        }
+        return hologram.GetComponent<Collider>().bounds;
     }
 }

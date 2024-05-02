@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -73,8 +74,11 @@ public class Movement : MonoBehaviour
                 {
                     if (hologram == null)
                     {
-                        var holo = AddHologram(hit.point);
-                        gameManager.AddHologram(holo);
+                        //var holo = AddHologram(hit.point);
+                        //gameManager.AddHologram(holo);
+
+                        hologram = Instantiate(hologramPrefab, new Vector3(hit.point.x, transform.position.y, hit.point.z), Quaternion.identity);
+                        gameManager.AddToQueue(hologram);
                     }
                     else
                     {
@@ -109,7 +113,7 @@ public class Movement : MonoBehaviour
         {
             foreach (var bounds in gameManager.GetBounds())
             {
-                Vector3 offset = new Vector3(0, 0, 0);
+                Vector3 offset = Vector3.zero;
                 var b = hologram.GetComponent<Collider>().bounds;
                 float spacing = 1;
                 b.Expand(spacing);
@@ -126,12 +130,13 @@ public class Movement : MonoBehaviour
             foreach (var bounds in gameManager.GetBounds())
             {
                 var b = hologram.GetComponent<Collider>().bounds;
+                b.center = hologram.transform.position;
                 float spacing = 1;
                 b.Expand(spacing);
                 if (b.Intersects(bounds))
                 {
                     Destroy(hologram);
-                    //return AddHologram(point);
+                    return AddHologram(point);
                 }
             }
         }
