@@ -1210,7 +1210,7 @@ GameObject:
   - component: {fileID: 1002650884}
   - component: {fileID: 1002650883}
   - component: {fileID: 1002650882}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1779,7 +1779,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1408769177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2445,7 +2445,7 @@ GameObject:
   - component: {fileID: 1673902534}
   - component: {fileID: 1673902533}
   - component: {fileID: 1673902532}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2550,7 +2550,7 @@ GameObject:
   - component: {fileID: 1691264926}
   - component: {fileID: 1691264925}
   - component: {fileID: 1691264924}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3604,7 +3604,6 @@ SceneRoots:
   - {fileID: 71336368}
   - {fileID: 2135463036}
   - {fileID: 1753835089}
-  - {fileID: 1408769184}
   - {fileID: 4424074437779099721}
   - {fileID: 1376668190}
   - {fileID: 1043949586}
@@ -3614,3 +3613,4 @@ SceneRoots:
   - {fileID: 1991468093}
   - {fileID: 604083699}
   - {fileID: 563109033}
+  - {fileID: 1408769184}

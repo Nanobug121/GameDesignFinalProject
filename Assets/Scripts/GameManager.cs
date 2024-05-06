@@ -72,7 +72,6 @@ public class GameManager : MonoBehaviour
 
     public void AddHologram(Bounds hologram)
     {
-        Debug.Log(holograms);
         if (holograms != null)
         {
             Bounds[] old = ((Bounds[])holograms.Clone());
@@ -99,10 +98,49 @@ public class GameManager : MonoBehaviour
         holograms = null;
     }
 
+    void SortQueue()
+    {
+        List<Bounds> bList = new List<Bounds>();
+        List<GameObject> gList = new List<GameObject>();
+        GameObject hologram;
+        var a = holoQueue.ToArray();
+        while (holoQueue.TryDequeue(out hologram))
+        {
+            bList.Add(hologram.GetComponent<Renderer>().bounds);
+            gList.Add(hologram);
+        }
+        for (int i = 0; i < bList.Count; i++)
+        {
+            for (int k = 0; k < i; k++)
+            {
+                if(bList[i].extents.sqrMagnitude > bList[k].extents.sqrMagnitude)
+                {
+                    {
+                        var temp = bList[i];
+                        bList[i] = bList[k];
+                        bList[k] = temp;
+                    }
+                    {
+                        var temp = gList[i];
+                        gList[i] = gList[k];
+                        gList[k] = temp;
+                    }
+                    i--;
+                    break;
+                }
+            }
+        }
+        foreach(var item in gList)
+        {
+            holoQueue.Enqueue(item);
+        }
+    }
+
     public void ComputeHolograms()
     {
+        SortQueue();
         GameObject hologram;
-        while(holoQueue.TryDequeue(out hologram))
+        while (holoQueue.TryDequeue(out hologram))
         {
             AddHologram(ComputeHologram(hologram));
         }
@@ -112,36 +150,36 @@ public class GameManager : MonoBehaviour
     {
         if (GetBounds() != null)
         {
-                Vector3 offset = Vector3.zero;
+            Vector3 offset = Vector3.zero;
             foreach (var bounds in GetBounds())
             {
-                var b = hologram.GetComponent<Collider>().bounds;
+                var b = hologram.GetComponent<Renderer>().bounds;
                 float spacing = 1;
                 b.Expand(spacing);
                 while (b.Intersects(bounds))
                 {
                     offset += new Vector3(Random.value * 0.2f - 0.1f, 0, Random.value * 0.2f - 0.1f);
 
-                    b = hologram.GetComponent<Collider>().bounds;
+                    b = hologram.GetComponent<Renderer>().bounds;
                     b.Expand(spacing);
                     b.center += offset;
                 }
             }
-                hologram.transform.Translate(offset);
             foreach (var bounds in GetBounds())
             {
-                var b = hologram.GetComponent<Collider>().bounds;
-                b.center = hologram.transform.position;
+                var b = hologram.GetComponent<Renderer>().bounds;
+                b.center += offset;
                 float spacing = 1;
                 b.Expand(spacing);
                 if (b.Intersects(bounds))
                 {
-                    hologram.transform.Translate(-offset);
-
+                    //hologram.transform.Translate(-offset);
+                    //Debug.Log("intersecting");
                     return ComputeHologram(hologram);
                 }
             }
+            hologram.transform.Translate(offset);
         }
-        return hologram.GetComponent<Collider>().bounds;
+        return hologram.GetComponent<Renderer>().bounds;
     }
 }
