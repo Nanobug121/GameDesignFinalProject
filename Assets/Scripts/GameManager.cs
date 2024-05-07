@@ -11,8 +11,19 @@ using System.Drawing;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject shipInfo;
+    [SerializeField] GameObject points;
+    public new Camera camera;
     Bounds[] holograms;
     ConcurrentQueue<GameObject> holoQueue;
+    private float shangPoints;
+    private float romanPoints;
+
+    public enum Team
+    {
+        None,
+        Roman,
+        Shang
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -65,6 +76,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void UpdatePoints()
+    {
+        points.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "" + ((int)romanPoints);
+        points.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = "" + ((int)shangPoints);
+    }
+
     public void AddToQueue(GameObject hologram)
     {
         holoQueue.Enqueue(hologram);
@@ -113,7 +130,7 @@ public class GameManager : MonoBehaviour
         {
             for (int k = 0; k < i; k++)
             {
-                if(bList[i].extents.sqrMagnitude > bList[k].extents.sqrMagnitude)
+                if (bList[i].extents.sqrMagnitude > bList[k].extents.sqrMagnitude)
                 {
                     {
                         var temp = bList[i];
@@ -130,7 +147,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        foreach(var item in gList)
+        foreach (var item in gList)
         {
             holoQueue.Enqueue(item);
         }
@@ -181,5 +198,13 @@ public class GameManager : MonoBehaviour
             hologram.transform.Translate(offset);
         }
         return hologram.GetComponent<Renderer>().bounds;
+    }
+
+    public void AddPoints(Team team, float points)
+    {
+        if (team == Team.None) return;
+        if (team == Team.Roman) romanPoints += points;
+        if (team == Team.Shang) shangPoints += points;
+        UpdatePoints();
     }
 }

@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] private new Camera camera;
+    public new Camera camera;
     [SerializeField] private GameObject hologramPrefab;
     private NavMeshAgent agent;
 
@@ -168,7 +168,7 @@ public class Movement : MonoBehaviour
     public void GoToEnemy(GameObject enemy)
     {
         nextEnemy = enemy;
-        agent.stoppingDistance = GetComponent<ShipInfo>().range;
+        agent.stoppingDistance = GetComponent<ShipInfo>().range - 1;
         agent.SetDestination(enemy.transform.position);
     }
 }

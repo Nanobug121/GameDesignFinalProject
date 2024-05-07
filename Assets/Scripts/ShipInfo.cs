@@ -11,6 +11,15 @@ public class ShipInfo : MonoBehaviour
     public float maxHealth { get { return gameObject.GetComponent<Health>().maxHealth; } }
     public float health { get { return gameObject.GetComponent<Health>().health; } }
     public float speed { get { return gameObject.GetComponent<NavMeshAgent>().speed; } }
+    public GameManager.Team team
+    {
+        get
+        {
+            if (gameObject.CompareTag("Roman")) return GameManager.Team.Roman;
+            if (gameObject.CompareTag("Shang")) return GameManager.Team.Shang;
+            return GameManager.Team.None;
+        }
+    }
     public WeaponState[] weapons
     {
         get
