@@ -207,4 +207,9 @@ public class GameManager : MonoBehaviour
         if (team == Team.Shang) shangPoints += points;
         UpdatePoints();
     }
+
+    public void Buy()
+    {
+        Debug.Log("buy");
+    }
 }
