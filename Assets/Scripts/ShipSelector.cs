@@ -100,6 +100,7 @@ public class ShipSelector : MonoBehaviour
             }
             else
             {
+                if (selected != null) {
                 foreach (var item in selected)
                 {
                     if (item != null)
@@ -109,6 +110,7 @@ public class ShipSelector : MonoBehaviour
                     }
                 }
                 selected = null;
+            }
                 Refresh();
             }
         }
