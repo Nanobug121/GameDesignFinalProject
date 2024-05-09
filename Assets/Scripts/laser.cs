@@ -19,7 +19,7 @@ public class laser : MonoBehaviour
     [SerializeField] private GameObject projectile;
     [SerializeField] private float damage = 1;
     private GameObject gameManager;
-    public string targetTag = "Shang";
+    public string targetTag;
 
     private ShipInfo.WeaponState weaponState = ShipInfo.WeaponState.idle;
 
@@ -47,7 +47,7 @@ public class laser : MonoBehaviour
 
     void Start()
     {
-
+        targetTag = transform.parent.GetComponent<ShipInfo>().enemyTeam.ToString();
     }
 
     void Update()

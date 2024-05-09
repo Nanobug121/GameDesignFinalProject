@@ -67,8 +67,11 @@ public class ShipSelector : MonoBehaviour
                         {
                             foreach (var item in selected)
                             {
-                                item.GetComponent<Movement>().DeActivate();
-                                item.transform.Find("range").gameObject.SetActive(false);
+                                if (item != null)
+                                {
+                                    item.GetComponent<Movement>().DeActivate();
+                                    item.transform.Find("range").gameObject.SetActive(false);
+                                }
                             }
                         }
                         selected = new GameObject[] { hit.collider.gameObject };
@@ -84,8 +87,11 @@ public class ShipSelector : MonoBehaviour
                     {
                         foreach (var item in selected)
                         {
-                            item.GetComponent<Movement>().DeActivate();
-                            item.transform.Find("range").gameObject.SetActive(false);
+                            if (item != null)
+                            {
+                                item.GetComponent<Movement>().DeActivate();
+                                item.transform.Find("range").gameObject.SetActive(false);
+                            }
                         }
                     }
                     selected = null;
@@ -96,8 +102,11 @@ public class ShipSelector : MonoBehaviour
             {
                 foreach (var item in selected)
                 {
-                    item.GetComponent<Movement>().DeActivate();
-                    item.transform.Find("range").gameObject.SetActive(false);
+                    if (item != null)
+                    {
+                        item.GetComponent<Movement>().DeActivate();
+                        item.transform.Find("range").gameObject.SetActive(false);
+                    }
                 }
                 selected = null;
                 Refresh();

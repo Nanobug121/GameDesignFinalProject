@@ -20,6 +20,16 @@ public class ShipInfo : MonoBehaviour
             return GameManager.Team.None;
         }
     }
+    public GameManager.Team enemyTeam
+    {
+        get
+        {
+            if (gameObject.CompareTag("Roman")) return GameManager.Team.Shang;
+            if (gameObject.CompareTag("Shang")) return GameManager.Team.Roman;
+            return GameManager.Team.None;
+        }
+    }
+
     public WeaponState[] weapons
     {
         get
