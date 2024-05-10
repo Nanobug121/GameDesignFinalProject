@@ -24,6 +24,7 @@ public class ShipSelector : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
+                if (hit.collider.transform.parent == null) return;
                 if (hit.collider.transform.parent.gameObject.tag == gameManager.GetComponent<GameManager>().GetEnemyTeam())
                 {
                     if (selected != null)

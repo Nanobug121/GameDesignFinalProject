@@ -48,7 +48,6 @@ public class laser : MonoBehaviour
     void Start()
     {
         targetTag = transform.parent.parent.GetComponent<ShipInfo>().enemyTeam.ToString();
-        Debug.Log(targetTag);
     }
 
     void Update()
@@ -61,8 +60,8 @@ public class laser : MonoBehaviour
                 ReTrack();
                 if (tracking == null) return;
                 state = ShipInfo.WeaponState.aiming;
-                transform.Rotate(new Vector3(0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f), 0));
-                if (Mathf.Abs(Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, targetRotation.y), -0.1f, 0.1f)) < .01f)
+                //transform.Rotate(new Vector3(0, 0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.z, targetRotation.z), -0.1f, 0.1f)));
+                //if (Mathf.Abs(Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.z, targetRotation.z), -0.1f, 0.1f)) < .01f)
                 {
 
                     float delta = Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized);
@@ -90,15 +89,12 @@ public class laser : MonoBehaviour
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Shang");
                 foreach (GameObject enemy in enemies)
                 {
-
-                    if (transform.parent.parent != null)
+                    if (Vector3.Distance(transform.position, enemy.transform.position) < transform.parent.parent.gameObject.GetComponent<ShipInfo>().range)
                     {
-                        if (Vector3.Distance(transform.position, enemy.transform.position) < transform.parent.parent.gameObject.GetComponent<ShipInfo>().range)
-                        {
-                            tracking = enemy;
-                            return;
-                        }
+                        tracking = enemy;
+                        return;
                     }
+
                 }
                 state = ShipInfo.WeaponState.idle;
             }
@@ -122,7 +118,7 @@ public class laser : MonoBehaviour
     {
         if (Time.time > shotLast + cooldown)
         {
-            if (Vector3.Distance(transform.position, newTarget.transform.position) < transform.parent.GetComponent<ShipInfo>().range)
+            if (Vector3.Distance(transform.position, newTarget.transform.position) < transform.parent.parent.GetComponent<ShipInfo>().range)
             {
                 tracking = newTarget;
             }
