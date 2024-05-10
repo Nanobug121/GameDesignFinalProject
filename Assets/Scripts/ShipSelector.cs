@@ -24,21 +24,21 @@ public class ShipSelector : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.gameObject.tag == gameManager.GetComponent<GameManager>().GetEnemyTeam())
+                if (hit.collider.transform.parent.gameObject.tag == gameManager.GetComponent<GameManager>().GetEnemyTeam())
                 {
                     if (selected != null)
                     {
                         foreach (var item in selected)
                         {
-                            foreach (laser l in item.GetComponentsInChildren<laser>())
-                            {
-                                l.SetTarget(hit.collider.gameObject);
-                            }
+                                foreach (laser l in item.GetComponentsInChildren<laser>())
+                                {
+                                    l.SetTarget(hit.collider.transform.parent.gameObject);
+                                }
                         }
                     }
                     return;
                 }
-                if (hit.collider.gameObject.tag == gameManager.GetComponent<GameManager>().GetPlayerTeam() && hit.collider.gameObject.GetComponent<Movement>() != null)
+                if (hit.collider.transform.parent.gameObject.tag == gameManager.GetComponent<GameManager>().GetPlayerTeam() && hit.collider.transform.parent.gameObject.GetComponent<Movement>() != null)
                 {
                     if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                     {
@@ -56,10 +56,10 @@ public class ShipSelector : MonoBehaviour
                         {
                             selected = new GameObject[1];
                         }
-                        selected[selected.Length - 1] = hit.collider.gameObject;
+                        selected[selected.Length - 1] = hit.collider.transform.parent.gameObject;
 
-                        hit.collider.gameObject.GetComponent<Movement>().Activate();
-                        hit.collider.gameObject.transform.Find("range").gameObject.SetActive(true);
+                        hit.collider.transform.parent.gameObject.GetComponent<Movement>().Activate();
+                        hit.collider.transform.parent.gameObject.transform.Find("range").gameObject.SetActive(true);
                     }
                     else
                     {
@@ -74,9 +74,9 @@ public class ShipSelector : MonoBehaviour
                                 }
                             }
                         }
-                        selected = new GameObject[] { hit.collider.gameObject };
+                        selected = new GameObject[] { hit.collider.transform.parent.gameObject };
                         selected[0].GetComponent<Movement>().Activate();
-                        hit.collider.gameObject.transform.Find("range").gameObject.SetActive(true);
+                        hit.collider.transform.parent.gameObject.transform.Find("range").gameObject.SetActive(true);
                     }
                     Refresh();
 

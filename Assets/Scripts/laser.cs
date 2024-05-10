@@ -47,7 +47,8 @@ public class laser : MonoBehaviour
 
     void Start()
     {
-        targetTag = transform.parent.GetComponent<ShipInfo>().enemyTeam.ToString();
+        targetTag = transform.parent.parent.GetComponent<ShipInfo>().enemyTeam.ToString();
+        Debug.Log(targetTag);
     }
 
     void Update()
@@ -86,13 +87,17 @@ public class laser : MonoBehaviour
         {
             if (Time.time > shotLast + cooldown)
             {
-                GameObject[] enemies = GameObject.FindGameObjectsWithTag(targetTag);
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Shang");
                 foreach (GameObject enemy in enemies)
                 {
-                    if (Vector3.Distance(transform.position, enemy.transform.position) < transform.parent.GetComponent<ShipInfo>().range)
+
+                    if (transform.parent.parent != null)
                     {
-                        tracking = enemy;
-                        return;
+                        if (Vector3.Distance(transform.position, enemy.transform.position) < transform.parent.parent.gameObject.GetComponent<ShipInfo>().range)
+                        {
+                            tracking = enemy;
+                            return;
+                        }
                     }
                 }
                 state = ShipInfo.WeaponState.idle;
@@ -133,17 +138,19 @@ public class laser : MonoBehaviour
 
     void ReTrack()
     {
-        if (Vector3.Distance(transform.position, tracking.transform.position) > transform.parent.GetComponent<ShipInfo>().range)
+        if (transform.parent.parent.GetComponent<ShipInfo>() != null)
         {
-            tracking = null;
-        }
-        if (tracking != null)
-        {
-            Quaternion oldRotation = transform.rotation;
-            transform.LookAt(tracking.transform.position);
-            targetRotation = transform.rotation.eulerAngles;
-            transform.rotation = oldRotation;
+            if (Vector3.Distance(transform.position, tracking.transform.position) > transform.parent.parent.GetComponent<ShipInfo>().range)
+            {
+                tracking = null;
+            }
+            if (tracking != null)
+            {
+                Quaternion oldRotation = transform.rotation;
+                transform.LookAt(tracking.transform.position);
+                targetRotation = transform.rotation.eulerAngles;
+                transform.rotation = oldRotation;
+            }
         }
     }
-
 }

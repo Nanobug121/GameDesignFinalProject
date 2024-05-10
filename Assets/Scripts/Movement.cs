@@ -27,6 +27,7 @@ public class Movement : MonoBehaviour
     {
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         agent = GetComponent<NavMeshAgent>();
+        camera = gameManager.camera;
     }
 
     // Update is called once per frame
