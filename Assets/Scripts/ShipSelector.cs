@@ -31,10 +31,10 @@ public class ShipSelector : MonoBehaviour
                     {
                         foreach (var item in selected)
                         {
-                                foreach (laser l in item.GetComponentsInChildren<laser>())
-                                {
-                                    l.SetTarget(hit.collider.transform.parent.gameObject);
-                                }
+                            foreach (laser l in item.GetComponentsInChildren<laser>())
+                            {
+                                l.SetTarget(hit.collider.transform.parent.gameObject);
+                            }
                         }
                     }
                     return;
@@ -101,7 +101,25 @@ public class ShipSelector : MonoBehaviour
             }
             else
             {
-                if (selected != null) {
+                if (selected != null)
+                {
+                    foreach (var item in selected)
+                    {
+                        if (item != null)
+                        {
+                            item.GetComponent<Movement>().DeActivate();
+                            item.transform.Find("range").gameObject.SetActive(false);
+                        }
+                    }
+                    selected = null;
+                }
+                Refresh();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (selected != null)
+            {
                 foreach (var item in selected)
                 {
                     if (item != null)
@@ -112,8 +130,7 @@ public class ShipSelector : MonoBehaviour
                 }
                 selected = null;
             }
-                Refresh();
-            }
+            Refresh();
         }
     }
 

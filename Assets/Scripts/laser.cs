@@ -75,9 +75,9 @@ public class laser : MonoBehaviour
 
                 //        if (delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
                 //        {
-                            //Destroy(tracking);
-                            Shoot();
-                            //tracking = null;
+                //Destroy(tracking);
+                Shoot();
+                //tracking = null;
                 //        }
                 //    }
                 //}
@@ -125,7 +125,7 @@ public class laser : MonoBehaviour
             }
             else
             {
-                transform.parent.GetComponent<Movement>().GoToEnemy(newTarget);
+                transform.parent.parent.GetComponent<Movement>().GoToEnemy(newTarget);
                 tracking = null;
             }
 

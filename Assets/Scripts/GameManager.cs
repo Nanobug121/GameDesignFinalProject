@@ -63,8 +63,8 @@ public class GameManager : MonoBehaviour
             shipInfo.SetActive(true);
             ShipInfo info = ship.GetComponent<ShipInfo>();
             shipInfo.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = ship.name;
-            shipInfo.transform.GetChild(2).gameObject.GetComponent<Slider>().value = info.health;
             shipInfo.transform.GetChild(2).gameObject.GetComponent<Slider>().maxValue = info.maxHealth;
+            shipInfo.transform.GetChild(2).gameObject.GetComponent<Slider>().value = info.health;
             shipInfo.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = "" + info.shipClass;
             TextMeshProUGUI status = shipInfo.transform.GetChild(4).gameObject.GetComponent<TextMeshProUGUI>();
             status.text = "";
@@ -170,21 +170,21 @@ public class GameManager : MonoBehaviour
             Vector3 offset = Vector3.zero;
             foreach (var bounds in GetBounds())
             {
-                var b = hologram.GetComponent<Renderer>().bounds;
+                var b = hologram.transform.GetChild(0).GetComponent<Renderer>().bounds;
                 float spacing = 1;
                 b.Expand(spacing);
                 while (b.Intersects(bounds))
                 {
-                    offset += new Vector3(Random.value * 0.2f - 0.1f, 0, Random.value * 0.2f - 0.1f);
+                    offset += new Vector3(Random.value * 2 - 1, 0, Random.value * 2 - 1);
 
-                    b = hologram.GetComponent<Renderer>().bounds;
+                    b = hologram.transform.GetChild(0).GetComponent<Renderer>().bounds;
                     b.Expand(spacing);
                     b.center += offset;
                 }
             }
             foreach (var bounds in GetBounds())
             {
-                var b = hologram.GetComponent<Renderer>().bounds;
+                var b = hologram.transform.GetChild(0).GetComponent<Renderer>().bounds;
                 b.center += offset;
                 float spacing = 1;
                 b.Expand(spacing);
