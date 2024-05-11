@@ -136,7 +136,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.06542921, y: 1.2347407, z: 1.6101375}
-  m_LocalScale: {x: 0.14, y: 0.14, z: 0.14}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1107080957144419411}
@@ -154,7 +154,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5ce8f32f1d1a8a44ba23e92dee1c0ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4.07
+  speed: 20
+  targetTag: 
+  damage: 0
 --- !u!33 &6165619655469521798
 MeshFilter:
   m_ObjectHideFlags: 0

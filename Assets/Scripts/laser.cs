@@ -62,24 +62,26 @@ public class laser : MonoBehaviour
                 state = ShipInfo.WeaponState.aiming;
                 //transform.Rotate(new Vector3(0, 0, Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.z, targetRotation.z), -0.1f, 0.1f)));
                 //if (Mathf.Abs(Mathf.Clamp(Mathf.DeltaAngle(transform.rotation.eulerAngles.z, targetRotation.z), -0.1f, 0.1f)) < .01f)
-                {
 
-                    float delta = Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized);
-                    barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, 0.5f * Time.deltaTime);
-                    barrels[1].transform.RotateAround(barrels[1].transform.GetChild(0).position - barrels[1].transform.position, -0.5f * Time.deltaTime);
-                    if (delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
-                    {
-                        barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, -1 * Time.deltaTime);
-                        barrels[1].transform.RotateAround(barrels[1].transform.GetChild(0).position - barrels[1].transform.position, 1 * Time.deltaTime);
 
-                        if (delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
-                        {
+                //{
+
+                //    float delta = Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized);
+                //    barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, 0.5f * Time.deltaTime);
+                //    barrels[1].transform.RotateAround(barrels[1].transform.GetChild(0).position - barrels[1].transform.position, -0.5f * Time.deltaTime);
+                //    if (delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
+                //    {
+                //        barrels[0].transform.RotateAround(barrels[0].transform.GetChild(0).position - barrels[0].transform.position, -1 * Time.deltaTime);
+                //        barrels[1].transform.RotateAround(barrels[2].transform.GetChild(0).position - barrels[2].transform.position, 1 * Time.deltaTime);
+
+                //        if (delta < Vector3.Distance(-(barrels[0].transform.GetChild(0).GetChild(0).position - barrels[0].transform.GetChild(0).position).normalized, (transform.position - tracking.transform.position).normalized))
+                //        {
                             //Destroy(tracking);
                             Shoot();
                             //tracking = null;
-                        }
-                    }
-                }
+                //        }
+                //    }
+                //}
             }
         }
         else

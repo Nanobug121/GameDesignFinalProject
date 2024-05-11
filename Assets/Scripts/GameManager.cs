@@ -120,10 +120,10 @@ public class GameManager : MonoBehaviour
         List<Bounds> bList = new List<Bounds>();
         List<GameObject> gList = new List<GameObject>();
         GameObject hologram;
-        var a = holoQueue.ToArray();
+        //var a = holoQueue.ToArray();
         while (holoQueue.TryDequeue(out hologram))
         {
-            bList.Add(hologram.GetComponent<Renderer>().bounds);
+            bList.Add(hologram.transform.GetChild(0).gameObject.GetComponent<Renderer>().bounds);
             gList.Add(hologram);
         }
         for (int i = 0; i < bList.Count; i++)
@@ -197,7 +197,7 @@ public class GameManager : MonoBehaviour
             }
             hologram.transform.Translate(offset);
         }
-        return hologram.GetComponent<Renderer>().bounds;
+        return hologram.transform.GetChild(0).gameObject.GetComponent<Renderer>().bounds;
     }
 
     public void AddPoints(Team team, float points)

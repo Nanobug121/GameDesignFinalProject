@@ -76,7 +76,8 @@ public class ShipInfo : MonoBehaviour
     void Start()
     {
         var r = transform.Find("range");
-        r.localScale = new Vector3(range, 0.1f, range);
+        if (r != null)
+            r.localScale = new Vector3(range, 0.1f, range);
     }
 
     // Update is called once per frame

@@ -22,9 +22,9 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag.Equals(targetTag))
+        if (collision.transform.parent.gameObject.tag.Equals(targetTag))
         {
-            collision.gameObject.GetComponent<Health>().Hit(damage);
+            collision.transform.parent.gameObject.GetComponent<Health>().Hit(damage);
             Destroy(gameObject);
         }
     }
