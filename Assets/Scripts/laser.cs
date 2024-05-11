@@ -52,7 +52,6 @@ public class laser : MonoBehaviour
 
     void Update()
     {
-        //WARNING: DO NOT TOUCH -- IT WORKS
         if (tracking != null)
         {
             if (Time.time > shotLast + cooldown)
@@ -88,7 +87,7 @@ public class laser : MonoBehaviour
         {
             if (Time.time > shotLast + cooldown)
             {
-                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Shang");
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag(targetTag);
                 foreach (GameObject enemy in enemies)
                 {
                     if (Vector3.Distance(transform.position, enemy.transform.position) < transform.parent.parent.gameObject.GetComponent<ShipInfo>().range)

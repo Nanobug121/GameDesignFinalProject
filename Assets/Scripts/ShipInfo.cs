@@ -34,11 +34,11 @@ public class ShipInfo : MonoBehaviour
     {
         get
         {
-            WeaponState[] ret = new WeaponState[transform.childCount];
-            for (int i = 0; i < transform.childCount; i++)
+            WeaponState[] ret = new WeaponState[transform.GetChild(0).childCount];
+            for (int i = 0; i < transform.GetChild(0).childCount; i++)
             {
-                if (transform.GetChild(i).GetComponent<laser>() != null)
-                    ret[i] = transform.GetChild(i).GetComponent<laser>().state;
+                if (transform.GetChild(0).GetChild(i).GetComponent<laser>() != null)
+                    ret[i] = transform.GetChild(0).GetChild(i).GetComponent<laser>().state;
             }
             return ret;
         }
@@ -47,11 +47,11 @@ public class ShipInfo : MonoBehaviour
     {
         get
         {
-            string[] ret = new string[transform.childCount];
-            for (int i = 0; i < transform.childCount; i++)
+            string[] ret = new string[transform.GetChild(0).childCount];
+            for (int i = 0; i < transform.GetChild(0).childCount; i++)
             {
-                if (transform.GetChild(i).GetComponent<laser>() != null)
-                    ret[i] = transform.GetChild(i).name;
+                if (transform.GetChild(0).GetChild(i).GetComponent<laser>() != null)
+                    ret[i] = transform.GetChild(0).GetChild(i).name;
             }
             return ret;
         }
