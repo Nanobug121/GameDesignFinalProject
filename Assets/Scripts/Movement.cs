@@ -22,6 +22,7 @@ public class Movement : MonoBehaviour
     private bool active = false;
     private bool stopping = false;
     private GameObject nextEnemy;
+    public GameObject particle;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,14 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(agent.velocity.magnitude > 0.01f)
+        {
+            particle.SetActive(true);
+        }
+        else
+        {
+            particle.SetActive(false);
+        }
         if (active)
         {
             if (stopping)

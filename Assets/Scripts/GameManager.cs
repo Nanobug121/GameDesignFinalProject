@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.AI;
 using System.Collections.Concurrent;
 using System.Drawing;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class GameManager : MonoBehaviour
     ConcurrentQueue<GameObject> holoQueue;
     private float shangPoints;
     private float romanPoints;
+
+    public GameObject lose;
+    public GameObject win;
 
     public enum Team
     {
@@ -35,6 +39,14 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         deleteBounds();
+        if(GameObject.FindGameObjectsWithTag(GetPlayerTeam()).Length == 0)
+        {
+            lose.SetActive(true);
+        }
+        else if (GameObject.FindGameObjectsWithTag(GetEnemyTeam()).Length == 0)
+        {
+            win.SetActive(true);
+        }
     }
 
     private void LateUpdate()
@@ -211,5 +223,15 @@ public class GameManager : MonoBehaviour
     public void Buy()
     {
         Debug.Log("buy");
+    }
+
+    public void PlaySound(AudioClip ac)
+    {
+        GetComponent<AudioSource>().PlayOneShot(ac);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
     }
 }
