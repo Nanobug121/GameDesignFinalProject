@@ -7,6 +7,8 @@ public class StartMenuController : MonoBehaviour
 {
     public GameObject startButton;
     public GameObject planetSelector;
+    public GameObject controls;
+    public GameObject back;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,5 +30,18 @@ public class StartMenuController : MonoBehaviour
     public void ChoosePlanet()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void ShowControls()
+    {
+        startButton.SetActive(false);
+        controls.SetActive(true);
+        back.SetActive(true);
+    }
+    public void HideControls()
+    {
+        startButton.SetActive(true);
+        controls.SetActive(false);
+        back.SetActive(false);
     }
 }

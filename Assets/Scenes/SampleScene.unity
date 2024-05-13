@@ -4066,6 +4066,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hoplon
       objectReference: {fileID: 0}
+    - target: {fileID: 6286905108318404484, guid: d71d99f60ad823b49ac0bdf8b443806e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7869908523849538356, guid: d71d99f60ad823b49ac0bdf8b443806e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.032794
@@ -4281,6 +4285,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Xiphos
       objectReference: {fileID: 0}
+    - target: {fileID: 3342240717966261982, guid: 5de40c44b9251804dbc28ba16ad40cd3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4301,6 +4309,10 @@ PrefabInstance:
     - target: {fileID: 6066240551111055332, guid: 7e33e59652229fc4f9e970c99d3307a8, type: 3}
       propertyPath: m_Name
       value: Phalanx
+      objectReference: {fileID: 0}
+    - target: {fileID: 6066240551111055332, guid: 7e33e59652229fc4f9e970c99d3307a8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9201584688990585777, guid: 7e33e59652229fc4f9e970c99d3307a8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4530,6 +4542,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cataphract
       objectReference: {fileID: 0}
+    - target: {fileID: 669609446823697537, guid: d38c618353643dc4c9528975f021cee0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6755840831997173658, guid: d38c618353643dc4c9528975f021cee0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 140.8
@@ -4586,6 +4602,10 @@ PrefabInstance:
     - target: {fileID: 1067944728956849932, guid: 89ab7aad92edae046a0dbd826a3c9ff9, type: 3}
       propertyPath: m_Name
       value: Corinth
+      objectReference: {fileID: 0}
+    - target: {fileID: 1067944728956849932, guid: 89ab7aad92edae046a0dbd826a3c9ff9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5462038768564600220, guid: 89ab7aad92edae046a0dbd826a3c9ff9, type: 3}
       propertyPath: m_LocalPosition.x
